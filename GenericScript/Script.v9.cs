@@ -1301,7 +1301,7 @@ namespace Mohid
 
          Dictionary<string, string> toReplace = new Dictionary<string, string>();
          toReplace["<<file.to.upload>>"] = file.FullPath;
-         toReplace["<<path.on.upload>>"] = path_on_ftp;
+         toReplace["<<path.on.ftp>>"] = path_on_ftp;
 
          try
          {
