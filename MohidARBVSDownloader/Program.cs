@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Data.Odbc;
+using System.Globalization;
 
 using Mohid.Core;
 using Mohid.CommandArguments;
@@ -10,6 +11,7 @@ using Mohid.Configuration;
 using Mohid.MohidTimeSeries;
 using Mohid.Files;
 using Mohid.Databases;
+using System.Threading;
 
 namespace MohidARBVSDownloader
 {
@@ -50,6 +52,8 @@ namespace MohidARBVSDownloader
          int interval_seconds_guess;
          string dateFormat;
          string server = "http://www.meteoagri.com/";
+
+         Thread.CurrentThread.CurrentCulture = CultureInfo.InvariantCulture;
 
          try
          {

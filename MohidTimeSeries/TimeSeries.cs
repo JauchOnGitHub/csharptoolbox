@@ -46,6 +46,7 @@ namespace Mohid
             saveResidual = false;
             extraLines = new List<string>();
             instants = new Column(typeof(double));
+            instants.DataFormat = "0.0000";
             dataColumns = new List<Column>();
             startInstant = DateTime.Now;
          }
