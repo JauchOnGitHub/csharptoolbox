@@ -81,12 +81,15 @@ namespace MohidARBVSDownloader
                Config conf = new Config(cmdArgs.Parameters["cfg"]);
                conf.Load();
 
-               ConfigNode dbConf = conf.Root.ChildNodes.Find(delegate(ConfigNode node) { return node.Name == "database.config"; });
-               if (dbConf == null)
-                  throw new Exception("No 'database.config' block was found.");
+               if (save_db)
+               {
+                  ConfigNode dbConf = conf.Root.ChildNodes.Find(delegate(ConfigNode node) { return node.Name == "database.config"; });
+                  if (dbConf == null)
+                     throw new Exception("No 'database.config' block was found.");
 
-               if (db.Connect(dbConf["db.conn.string"].AsString()) != Result.TRUE)
-                  throw new Exception("Connection to database was not possible. The message returned was: " + db.RaisedException.Message);
+                  if (db.Connect(dbConf["db.conn.string"].AsString()) != Result.TRUE)
+                     throw new Exception("Connection to database was not possible. The message returned was: " + db.RaisedException.Message);
+               }
 
                server = conf.Root["server", "http://www.meteoagri.com/"].AsString();
                defaultDaysToDownload = conf.Root["days.to.download", 14].AsInt();
