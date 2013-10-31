@@ -516,6 +516,7 @@ namespace MohidHDF5Processor
                            break;
                      }
                   }
+
                   switch (obj.NDims)
                   {
                      case 1:
@@ -1272,7 +1273,7 @@ namespace MohidHDF5Processor
 
                                        for (i = 0; i < obj.Dims[0]; i++)
                                           for (j = 0; j < obj.Dims[1]; j++)
-                                             for (k = 0; k < obj.Dims[1]; k++)
+                                             for (k = 0; k < obj.Dims[2]; k++)
                                              {
                                                 if (!use_mapping || (Mapping3D[i, j, k] == 1))
                                                    ((float[, ,])data)[i, j, k] = (float)Math.Sqrt(Math.Pow(((float[,])data)[i, j], 2) + Math.Pow(data2[i, j, k], 2));
@@ -1287,7 +1288,7 @@ namespace MohidHDF5Processor
                                     {
                                        for (i = 0; i < obj.Dims[0]; i++)
                                           for (j = 0; j < obj.Dims[1]; j++)
-                                             for (k = 0; k < obj.Dims[1]; k++)
+                                             for (k = 0; k < obj.Dims[2]; k++)
                                              {
                                                 if (!use_mapping || (Mapping3D[i, j, k] == 1))
                                                    ((float[,,])data)[i, j, k] = ((float[, ,])data)[i, j, k] * (float)4.87 / ((float)Math.Log(67.8 * 10.0 + 5.42));
@@ -1298,7 +1299,7 @@ namespace MohidHDF5Processor
                                     {
                                        for (i = 0; i < obj.Dims[0]; i++)
                                           for (j = 0; j < obj.Dims[1]; j++)
-                                             for (k = 0; k < obj.Dims[1]; k++)
+                                             for (k = 0; k < obj.Dims[2]; k++)
                                              {
                                                 if (!use_mapping || (Mapping3D[i, j, k] == 1))
                                                    ((float[,,])data)[i, j, k] = ((float[, ,])data)[i, j, k] * (float)item.PropertyInfo.MultFactor;
@@ -1309,7 +1310,7 @@ namespace MohidHDF5Processor
                                     {
                                        for (i = 0; i < obj.Dims[0]; i++)
                                           for (j = 0; j < obj.Dims[1]; j++)
-                                             for (k = 0; k < obj.Dims[1]; k++)
+                                             for (k = 0; k < obj.Dims[2]; k++)
                                              {
                                                 if (!use_mapping || (Mapping3D[i, j, k] == 1))
                                                    ((float[, ,])data)[i, j, k] = ((float[, ,])data)[i, j, k] + (float)item.PropertyInfo.ValueToAdd;
@@ -1320,7 +1321,7 @@ namespace MohidHDF5Processor
                                     {
                                        for (i = 0; i < obj.Dims[0]; i++)
                                           for (j = 0; j < obj.Dims[1]; j++)
-                                             for (k = 0; k < obj.Dims[1]; k++)
+                                             for (k = 0; k < obj.Dims[2]; k++)
                                              {
                                                 if (!use_mapping || (Mapping3D[i, j, k] == 1))
                                                    if (((float[,,])data)[i, j, k] > (float)item.PropertyInfo.MaxValue)
@@ -1332,7 +1333,7 @@ namespace MohidHDF5Processor
                                     {
                                        for (i = 0; i < obj.Dims[0]; i++)
                                           for (j = 0; j < obj.Dims[1]; j++)
-                                             for (k = 0; k < obj.Dims[1]; k++)
+                                             for (k = 0; k < obj.Dims[2]; k++)
                                              {
                                                 if (!use_mapping || (Mapping3D[i, j, k] == 1))
                                                    if (((float[,,])data)[i, j, k] < (float)item.PropertyInfo.MinValue)
@@ -1353,7 +1354,7 @@ namespace MohidHDF5Processor
 
                                  for (i = 0; i < obj.Dims[0]; i++)
                                     for (j = 0; j < obj.Dims[1]; j++)
-                                       for (k = 0; k < obj.Dims[1]; k++)
+                                       for (k = 0; k < obj.Dims[2]; k++)
                                        {
                                           if (!use_mapping || (Mapping3D[i, j, k] == 1))
                                           {
@@ -1398,7 +1399,7 @@ namespace MohidHDF5Processor
 
                                        for (i = 0; i < obj.Dims[0]; i++)
                                           for (j = 0; j < obj.Dims[1]; j++)
-                                             for (k = 0; k < obj.Dims[1]; k++)
+                                             for (k = 0; k < obj.Dims[2]; k++)
                                              {
                                                 if (!use_mapping || (Mapping3D[i, j, k] == 1))
                                                    ((double[, ,])data)[i, j, k] = (double)Math.Sqrt(Math.Pow(((double[,])data)[i, j], 2) + Math.Pow(data2[i, j, k], 2));
@@ -1413,7 +1414,7 @@ namespace MohidHDF5Processor
                                     {
                                        for (i = 0; i < obj.Dims[0]; i++)
                                           for (j = 0; j < obj.Dims[1]; j++)
-                                             for (k = 0; k < obj.Dims[1]; k++)
+                                             for (k = 0; k < obj.Dims[2]; k++)
                                              {
                                                 if (!use_mapping || (Mapping3D[i, j, k] == 1))
                                                    ((double[, ,])data)[i, j, k] = ((double[, ,])data)[i, j, k] * (double)4.87 / ((double)Math.Log(67.8 * 10.0 + 5.42));
@@ -1424,7 +1425,7 @@ namespace MohidHDF5Processor
                                     {
                                        for (i = 0; i < obj.Dims[0]; i++)
                                           for (j = 0; j < obj.Dims[1]; j++)
-                                             for (k = 0; k < obj.Dims[1]; k++)
+                                             for (k = 0; k < obj.Dims[2]; k++)
                                              {
                                                 if (!use_mapping || (Mapping3D[i, j, k] == 1))
                                                    ((double[, ,])data)[i, j, k] = ((double[, ,])data)[i, j, k] * (double)item.PropertyInfo.MultFactor;
@@ -1435,7 +1436,7 @@ namespace MohidHDF5Processor
                                     {
                                        for (i = 0; i < obj.Dims[0]; i++)
                                           for (j = 0; j < obj.Dims[1]; j++)
-                                             for (k = 0; k < obj.Dims[1]; k++)
+                                             for (k = 0; k < obj.Dims[2]; k++)
                                              {
                                                 if (!use_mapping || (Mapping3D[i, j, k] == 1))
                                                    ((double[, ,])data)[i, j, k] = ((double[, ,])data)[i, j, k] + (double)item.PropertyInfo.ValueToAdd;
@@ -1446,7 +1447,7 @@ namespace MohidHDF5Processor
                                     {
                                        for (i = 0; i < obj.Dims[0]; i++)
                                           for (j = 0; j < obj.Dims[1]; j++)
-                                             for (k = 0; k < obj.Dims[1]; k++)
+                                             for (k = 0; k < obj.Dims[2]; k++)
                                              {
                                                 if (!use_mapping || (Mapping3D[i, j, k] == 1))
                                                    if (((double[, ,])data)[i, j, k] > (double)item.PropertyInfo.MaxValue)
@@ -1458,7 +1459,7 @@ namespace MohidHDF5Processor
                                     {
                                        for (i = 0; i < obj.Dims[0]; i++)
                                           for (j = 0; j < obj.Dims[1]; j++)
-                                             for (k = 0; k < obj.Dims[1]; k++)
+                                             for (k = 0; k < obj.Dims[2]; k++)
                                              {
                                                 if (!use_mapping || (Mapping3D[i, j, k] == 1))
                                                    if (((double[, ,])data)[i, j, k] < (double)item.PropertyInfo.MinValue)
@@ -1479,7 +1480,7 @@ namespace MohidHDF5Processor
 
                                  for (i = 0; i < obj.Dims[0]; i++)
                                     for (j = 0; j < obj.Dims[1]; j++)
-                                       for (k = 0; k < obj.Dims[1]; k++)
+                                       for (k = 0; k < obj.Dims[2]; k++)
                                        {
                                           if (!use_mapping || (Mapping3D[i, j, k] == 1))
                                           {
@@ -1524,7 +1525,7 @@ namespace MohidHDF5Processor
 
                                     for (i = 0; i < obj.Dims[0]; i++)
                                        for (j = 0; j < obj.Dims[1]; j++)
-                                          for (k = 0; k < obj.Dims[1]; k++)
+                                          for (k = 0; k < obj.Dims[2]; k++)
                                           {
                                              if (!use_mapping || (Mapping3D[i, j, k] == 1))
                                                 ((int[, ,])data)[i, j, k] = (int)Math.Sqrt(Math.Pow(((int[,])data)[i, j], 2) + Math.Pow(data2[i, j, k], 2));
@@ -1538,7 +1539,7 @@ namespace MohidHDF5Processor
                                  {
                                     for (i = 0; i < obj.Dims[0]; i++)
                                        for (j = 0; j < obj.Dims[1]; j++)
-                                          for (k = 0; k < obj.Dims[1]; k++)
+                                          for (k = 0; k < obj.Dims[2]; k++)
                                           {
                                              if (!use_mapping || (Mapping3D[i, j, k] == 1))
                                                 ((int[, ,])data)[i, j, k] = ((int[, ,])data)[i, j, k] * (int)4.87 / ((int)Math.Log(67.8 * 10.0 + 5.42));
@@ -1549,7 +1550,7 @@ namespace MohidHDF5Processor
                                  {
                                     for (i = 0; i < obj.Dims[0]; i++)
                                        for (j = 0; j < obj.Dims[1]; j++)
-                                          for (k = 0; k < obj.Dims[1]; k++)
+                                          for (k = 0; k < obj.Dims[2]; k++)
                                           {
                                              if (!use_mapping || (Mapping3D[i, j, k] == 1))
                                                 ((int[, ,])data)[i, j, k] = ((int[, ,])data)[i, j, k] * (int)item.PropertyInfo.MultFactor;
@@ -1560,7 +1561,7 @@ namespace MohidHDF5Processor
                                  {
                                     for (i = 0; i < obj.Dims[0]; i++)
                                        for (j = 0; j < obj.Dims[1]; j++)
-                                          for (k = 0; k < obj.Dims[1]; k++)
+                                          for (k = 0; k < obj.Dims[2]; k++)
                                           {
                                              if (!use_mapping || (Mapping3D[i, j, k] == 1))
                                                 ((int[, ,])data)[i, j, k] = ((int[, ,])data)[i, j, k] + (int)item.PropertyInfo.ValueToAdd;
@@ -1571,7 +1572,7 @@ namespace MohidHDF5Processor
                                  {
                                     for (i = 0; i < obj.Dims[0]; i++)
                                        for (j = 0; j < obj.Dims[1]; j++)
-                                          for (k = 0; k < obj.Dims[1]; k++)
+                                          for (k = 0; k < obj.Dims[2]; k++)
                                           {
                                              if (!use_mapping || (Mapping3D[i, j, k] == 1))
                                                 if (((int[, ,])data)[i, j, k] > (int)item.PropertyInfo.MaxValue)
@@ -1583,7 +1584,7 @@ namespace MohidHDF5Processor
                                  {
                                     for (i = 0; i < obj.Dims[0]; i++)
                                        for (j = 0; j < obj.Dims[1]; j++)
-                                          for (k = 0; k < obj.Dims[1]; k++)
+                                          for (k = 0; k < obj.Dims[2]; k++)
                                           {
                                              if (!use_mapping || (Mapping3D[i, j, k] == 1))
                                                 if (((int[, ,])data)[i, j, k] < (int)item.PropertyInfo.MinValue)
@@ -1604,18 +1605,18 @@ namespace MohidHDF5Processor
 
                               for (i = 0; i < obj.Dims[0]; i++)
                                  for (j = 0; j < obj.Dims[1]; j++)
-                                    for (k = 0; k < obj.Dims[1]; k++)
+                                    for (k = 0; k < obj.Dims[2]; k++)
                                     {
-                                       if (!use_mapping || (Mapping3D[i,j,k] == 1))
+                                       if (!use_mapping || (Mapping3D[i, j, k] == 1))
                                        {
-                                          if ((float)((int[,,])data)[i,j,k] <= d_min)
-                                             d_min = (float)((int[,,])data)[i,j,k];
-                                          if ((float)((int[,,])data)[i,j,k] >= d_max)
-                                             d_max = (float)((int[,,])data)[i,j,k];
-                                          if ((float)((int[,,])data)[i,j,k] <= g_min)
-                                             g_min = (float)((int[,,])data)[i,j,k];
-                                          if ((float)((int[,,])data)[i,j,k] >= g_max)
-                                             g_max = (float)((int[,,])data)[i,j,k];
+                                          if ((float)((int[, ,])data)[i, j, k] <= d_min)
+                                             d_min = (float)((int[, ,])data)[i, j, k];
+                                          if ((float)((int[, ,])data)[i, j, k] >= d_max)
+                                             d_max = (float)((int[, ,])data)[i, j, k];
+                                          if ((float)((int[, ,])data)[i, j, k] <= g_min)
+                                             g_min = (float)((int[, ,])data)[i, j, k];
+                                          if ((float)((int[, ,])data)[i, j, k] >= g_max)
+                                             g_max = (float)((int[, ,])data)[i, j, k];
                                        }
                                     }
 
