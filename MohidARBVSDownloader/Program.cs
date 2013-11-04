@@ -275,8 +275,12 @@ namespace MohidARBVSDownloader
                   }
 
                   if (save_ts)
-                     ts.Save(new FileName(dr.TimeSeriesFileName));
-
+                  {
+                      if (ts.NumberOfInstants > 1)
+                          ts.Save(new FileName(dr.TimeSeriesFileName));
+                      else
+                          Console.WriteLine("No data was available for {0}", dr.TimeSeriesFileName);
+                  }
                   count++;
                }
 
