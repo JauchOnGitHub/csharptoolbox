@@ -67,8 +67,8 @@ namespace Mohid
                   if (!string.IsNullOrEmpty(value))
                   {
                      fWorkingDirectory = value;
-                     if (!fWorkingDirectory.EndsWith("\\"))
-                        fWorkingDirectory += "\\";
+                     if (!fWorkingDirectory.EndsWith(System.IO.Path.DirectorySeparatorChar.ToString()))
+                        fWorkingDirectory += System.IO.Path.DirectorySeparatorChar.ToString();
                   }
                }
             }
@@ -87,8 +87,8 @@ namespace Mohid
                   if (!string.IsNullOrEmpty(value))
                   {
                      fAppPath = value;
-                     if (!fAppPath.EndsWith("\\"))
-                        fAppPath += "\\";
+                     if (!fAppPath.EndsWith(System.IO.Path.DirectorySeparatorChar.ToString()))
+                        fAppPath += System.IO.Path.DirectorySeparatorChar.ToString();
                   }
                }
             }
@@ -96,8 +96,8 @@ namespace Mohid
 
          public virtual void Reset()
          {
-            fWorkingDirectory = ".\\";
-            fAppPath = ".\\";
+            fWorkingDirectory = "." + System.IO.Path.DirectorySeparatorChar;
+            fAppPath = "." + System.IO.Path.DirectorySeparatorChar;
             AppName = "app.exe";
             ThrowExceptionOnError = false;
             CheckSuccessMethod = CheckSuccessMethod.DEFAULTOUTPUT;

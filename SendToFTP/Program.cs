@@ -31,7 +31,7 @@ namespace SendToFTP
          DirectoryInfo dir = new DirectoryInfo(@"L:\Portugal\Douro\Tamega\MyWater\Simulations\MohidLand\Ref.Evtp.3m.4\store");
          foreach (System.IO.DirectoryInfo g in dir.GetDirectories())
          {
-            string folder = g.FullName.Substring(g.FullName.LastIndexOf('\\'));
+            string folder = g.FullName.Substring(g.FullName.LastIndexOf(System.IO.Path.DirectorySeparatorChar));
 
             FileTools.CreateFolder(folder, new FilePath(@"E:\Aplica\Projects\MyWater\Work\ToFTP\"));
             Copy("atmosphere.hdf5", "atmosphere.hdf5", g.FullName, @"E:\Aplica\Projects\MyWater\Work\ToFTP\" + folder);

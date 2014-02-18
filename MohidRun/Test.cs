@@ -562,10 +562,10 @@ namespace Mohid
 
                if (practices_block["search.first", true].AsBool())
                {
-                  if (File.Exists(general_boundary_data.Path + store_folder + "\\" + practices_file.FullName))
+                  if (File.Exists(general_boundary_data.Path + store_folder + System.IO.Path.DirectorySeparatorChar + practices_file.FullName))
                   {
                      if (general_boundary_data.Path != run_boundary_data.Path)
-                        File.Copy(general_boundary_data.Path + store_folder + "\\" + practices_file.FullName, run_boundary_data.Path + practices_file.FullName, true);
+                        File.Copy(general_boundary_data.Path + store_folder + System.IO.Path.DirectorySeparatorChar + practices_file.FullName, run_boundary_data.Path + practices_file.FullName, true);
 
                      return;
                   }
@@ -574,12 +574,12 @@ namespace Mohid
                Console.WriteLine("Creating practices HDF file...");
 
                FillMatrix(script_block["model.grid.data"].AsFileName(),
-                          new FileName(practices_file.Path + store_folder + "\\" + practices_file.FullName),
+                          new FileName(practices_file.Path + store_folder + System.IO.Path.DirectorySeparatorChar + practices_file.FullName),
                           mred.sim.Start, mred.sim.End, practices_block["fillmatrix.template"].AsFileName(),
                           practices_block["config.file.name", "fillmatrix.dat"].AsFileName());
 
                if (general_boundary_data.Path != run_boundary_data.Path)
-                  File.Copy(general_boundary_data.Path + store_folder + "\\" + practices_file.FullName, run_boundary_data.Path + practices_file.FullName, true);
+                  File.Copy(general_boundary_data.Path + store_folder + System.IO.Path.DirectorySeparatorChar + practices_file.FullName, run_boundary_data.Path + practices_file.FullName, true);
             }
          }
          catch (Exception ex)
@@ -594,7 +594,7 @@ namespace Mohid
       {
          try
          {
-            if (File.Exists(general_boundary_data.Path + store_folder + "\\" + meteo_file_name.FullName))
+            if (File.Exists(general_boundary_data.Path + store_folder + System.IO.Path.DirectorySeparatorChar + meteo_file_name.FullName))
                return true;
 
             return false;
@@ -676,7 +676,7 @@ namespace Mohid
                               meteo_bkp_folder = src["backup_folder", meteo_backup_interpolated_files].AsFilePath();
                               if (System.IO.File.Exists(meteo_bkp_folder.Path + file.FullName))
                               {
-                                 file.FullPath = "..\\" + meteo_bkp_folder.Path + file.FullName;
+                                 file.FullPath = ".." + System.IO.Path.DirectorySeparatorChar + meteo_bkp_folder.Path + file.FullName;
                                  file_found = true;
                                  Console.WriteLine("[ FOUND ]");
                               }
@@ -691,9 +691,9 @@ namespace Mohid
                                  {
 
                                     if (meteo_backup_interpolated_files)
-                                       output_path.Path = "..\\" + meteo_bkp_folder.Path;
+                                       output_path.Path = ".." + System.IO.Path.DirectorySeparatorChar + meteo_bkp_folder.Path;
                                     else
-                                       output_path.Path = "..\\" + meteo_interpolation_path.Path;
+                                       output_path.Path = ".." + System.IO.Path.DirectorySeparatorChar + meteo_interpolation_path.Path;
 
                                     FileName fgd = src["grid.data.file"].AsFileName();
                                     FileName tpl = src["template.file"].AsFileName();
@@ -778,12 +778,12 @@ namespace Mohid
             }
 
             if (!meteo_backup_files)
-               GlueFiles(files_to_glue, new FileName("..\\" + run_boundary_data.Path + meteo_file_name.FullName), false);
+               GlueFiles(files_to_glue, new FileName(".." + System.IO.Path.DirectorySeparatorChar + run_boundary_data.Path + meteo_file_name.FullName), false);
             else
-               GlueFiles(files_to_glue, new FileName("..\\" + run_boundary_data.Path + store_folder + "\\" + meteo_file_name.FullName), false);
+               GlueFiles(files_to_glue, new FileName(".." + System.IO.Path.DirectorySeparatorChar + run_boundary_data.Path + store_folder + System.IO.Path.DirectorySeparatorChar + meteo_file_name.FullName), false);
 
             if (meteo_backup_files && run_boundary_data.Path != general_boundary_data.Path)
-               File.Copy(run_boundary_data.Path + store_folder + "\\" + meteo_file_name.FullName, general_boundary_data.Path + store_folder + "\\" + meteo_file_name.FullName, true);
+               File.Copy(run_boundary_data.Path + store_folder + System.IO.Path.DirectorySeparatorChar + meteo_file_name.FullName, general_boundary_data.Path + store_folder + System.IO.Path.DirectorySeparatorChar + meteo_file_name.FullName, true);
 
          }
          catch (Exception ex)

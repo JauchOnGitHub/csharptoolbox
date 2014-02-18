@@ -83,6 +83,10 @@
     <Compile Include="CPTEC2HDF.48h.v2.cs" />
     <Compile Include="CPTEC2HDF.48h.v1.cs" />
     <Compile Include="CPTEC2HDF.v1.cs" />
+    <Compile Include="CPTEC2HDF.v2.cs" />
+    <Compile Include="CPTEC2HDF.v3.cs" />
+    <Compile Include="CPTEC6HoursGlue.cs" />
+    <Compile Include="CPTECByInterval.cs" />
     <Compile Include="InterpolateAndGlueMeteo.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

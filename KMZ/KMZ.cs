@@ -28,7 +28,7 @@ namespace Mohid
          public KMZEngine()
          {
             OverwriteKMZ = CopyOptions.IGNORE;
-            SearchPath = new FilePath(".\\");
+            SearchPath = new FilePath();
             KMLTemplate = new FileName("doc.kml");
             ChangeTemplate = false;
             KMLOutput = new FileName("doc.kml");

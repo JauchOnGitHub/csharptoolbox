@@ -223,7 +223,7 @@ namespace GetTSFromHDF
                                  {
                                     outTS[file.FileName.Name].Save(new FileName(tsPath.Path + file.FileName.Name + ".ets"));
                                     Console.WriteLine("[OK]");
-                                    FileTools.CopyFile(new FileName(tsPath.Path + file.FileName.Name + ".ets"), new FileName(tsPath.Path + "bkp\\" + file.FileName.Name + ".ets"), CopyOptions.OVERWRIGHT);
+                                    FileTools.CopyFile(new FileName(tsPath.Path + file.FileName.Name + ".ets"), new FileName((new FilePath(tsPath.Path + "bkp")).Path + file.FileName.Name + ".ets"), CopyOptions.OVERWRIGHT);
                                  }
                                  catch(Exception e_run)
                                  {

@@ -13,7 +13,7 @@ namespace Mohid
 
          public FilePath()
          {
-            path = ".\\";
+            path = "." + System.IO.Path.DirectorySeparatorChar;
          }
          public FilePath(string path)
          {
@@ -33,11 +33,11 @@ namespace Mohid
                {
                   if (value.Length == 0)
                   {
-                     path = ".\\";
+                     path = "." + System.IO.Path.DirectorySeparatorChar;
                   }
-                  else if (value[value.Length - 1] != '\\')
+                  else if (value[value.Length - 1] != System.IO.Path.DirectorySeparatorChar)
                   {
-                     path = value + "\\";
+                     path = value + System.IO.Path.DirectorySeparatorChar;
                   }
                   else
                   {

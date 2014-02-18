@@ -86,11 +86,13 @@ namespace Mohid
          string dateStr;
          DateTime simStart = simStartDate.AddSeconds(1);
 
+         char pd = System.IO.Path.DirectorySeparatorChar;
+
          //First is required the glue of two files
          HDFGlue tool = new HDFGlue();
          tool.AppName = "glue.exe";
-         tool.AppPath = @"..\tools\glue\";
-         tool.WorkingDirectory = @"..\tools\glue\";
+         tool.AppPath = System.IO.Path.Combine("..", "tools", "glue");
+         tool.WorkingDirectory = tool.AppPath;
          tool.Output = "meteo.glued.hdf5";
          tool.Is3DFile = false;
 
@@ -105,14 +107,16 @@ namespace Mohid
          tool.ThrowExceptionOnError = true;
          if (tool.Glue() != 0) return false;
 
+         
+
          //Now, do the "extraction"
-         if (!FileTools.CopyFile(new FileName(@"..\templates\tools\ConvertToHDF5Action-2.template"), new FileName(@"..\tools\interpolation\ConvertToHDF5Action.dat"), CopyOptions.OVERWRIGHT))
+         if (!FileTools.CopyFile(new FileName(@".."+ pd + "templates" + pd + "tools" + pd + "ConvertToHDF5Action-2.template"), new FileName(@".." + pd + "tools" + pd + "interpolation" + pd + "ConvertToHDF5Action.dat"), CopyOptions.OVERWRIGHT))
             return false;
 
          ExternalApp app = new ExternalApp();
 
-         app.Executable = @"..\tools\interpolation\interpolation.exe";
-         app.WorkingDirectory = @"..\tools\interpolation\";
+         app.Executable = @".." + pd + "tools" + pd + "interpolation" + pd + "interpolation.exe";
+         app.WorkingDirectory = @".." + pd + "tools" + pd + "interpolation" + pd;
          app.CheckSuccessMethod = CheckSuccessMethod.DEFAULTOUTPUT;
          app.TextToCheck = "successfully terminated";
          app.SearchTextOrder = SearchTextOrder.FROMEND;
@@ -164,10 +168,10 @@ namespace Mohid
             System.IO.DirectoryInfo dir = new System.IO.DirectoryInfo(mre.storeFolder.Path);
             foreach (System.IO.DirectoryInfo g in dir.GetDirectories())
             {
-               if (System.IO.File.Exists(g.FullName + "\\" + toGlue.FullName))
+               if (System.IO.File.Exists(g.FullName + System.IO.Path.DirectorySeparatorChar + toGlue.FullName))
                {
                   //Console.WriteLine("File '{0}' exists", g.FullName + "\\" + toGlue.FullName);
-                  glue.FilesToGlue.Add(g.FullName + "\\" + toGlue.FullName);
+                  glue.FilesToGlue.Add(g.FullName + System.IO.Path.DirectorySeparatorChar + toGlue.FullName);
                }
                else
                {
@@ -186,7 +190,7 @@ namespace Mohid
             return false;
 
          glue.FilesToGlue.Add(toGlue.FullName);
-         glue.FilesToGlue.Add("..\\" + toGlue.FullPath);
+         glue.FilesToGlue.Add(".." + System.IO.Path.DirectorySeparatorChar + toGlue.FullPath);
 
          if (glue.Glue() != 0)
             return false;

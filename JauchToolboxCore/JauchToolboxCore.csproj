@@ -1,0 +1,177 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{63562173-7498-465A-9790-8CA0C08D779B}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Mohid</RootNamespace>
+    <AssemblyName>JauchToolboxCore</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\x86\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <PlatformTarget>x86</PlatformTarget>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\x86\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <CodeAnalysisLogFile>bin\Debug\JauchToolboxCore.dll.CodeAnalysisLog.xml</CodeAnalysisLogFile>
+    <CodeAnalysisUseTypeNameInSuppression>true</CodeAnalysisUseTypeNameInSuppression>
+    <CodeAnalysisModuleSuppressionsFile>GlobalSuppressions.cs</CodeAnalysisModuleSuppressionsFile>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <CodeAnalysisRuleSetDirectories>;C:\Program Files (x86)\Microsoft Visual Studio 10.0\Team Tools\Static Analysis Tools\\Rule Sets</CodeAnalysisRuleSetDirectories>
+    <CodeAnalysisIgnoreBuiltInRuleSets>true</CodeAnalysisIgnoreBuiltInRuleSets>
+    <CodeAnalysisRuleDirectories>;C:\Program Files (x86)\Microsoft Visual Studio 10.0\Team Tools\Static Analysis Tools\FxCop\\Rules</CodeAnalysisRuleDirectories>
+    <CodeAnalysisIgnoreBuiltInRules>true</CodeAnalysisIgnoreBuiltInRules>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x86'">
+    <OutputPath>bin\x86\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <CodeAnalysisLogFile>bin\Release\JauchToolboxCore.dll.CodeAnalysisLog.xml</CodeAnalysisLogFile>
+    <CodeAnalysisUseTypeNameInSuppression>true</CodeAnalysisUseTypeNameInSuppression>
+    <CodeAnalysisModuleSuppressionsFile>GlobalSuppressions.cs</CodeAnalysisModuleSuppressionsFile>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <CodeAnalysisRuleSetDirectories>;C:\Program Files (x86)\Microsoft Visual Studio 10.0\Team Tools\Static Analysis Tools\\Rule Sets</CodeAnalysisRuleSetDirectories>
+    <CodeAnalysisIgnoreBuiltInRuleSets>true</CodeAnalysisIgnoreBuiltInRuleSets>
+    <CodeAnalysisRuleDirectories>;C:\Program Files (x86)\Microsoft Visual Studio 10.0\Team Tools\Static Analysis Tools\FxCop\\Rules</CodeAnalysisRuleDirectories>
+    <CodeAnalysisIgnoreBuiltInRules>true</CodeAnalysisIgnoreBuiltInRules>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="..\alerts\Alerts.cs">
+      <Link>Alerts\Alerts.cs</Link>
+    </Compile>
+    <Compile Include="..\cmdargs\Arguments.cs">
+      <Link>Arguments\Arguments.cs</Link>
+    </Compile>
+    <Compile Include="..\cmdarguments\CmdArguments.cs">
+      <Link>CmdArguments\CmdArguments.cs</Link>
+    </Compile>
+    <Compile Include="..\configuration\Config.cs">
+      <Link>Configuration\Config.cs</Link>
+    </Compile>
+    <Compile Include="..\configuration\ConfigNode.cs">
+      <Link>Configuration\ConfigNode.cs</Link>
+    </Compile>
+    <Compile Include="..\core\Column.cs">
+      <Link>Core\Column.cs</Link>
+    </Compile>
+    <Compile Include="..\core\Definitions.cs">
+      <Link>Core\Definitions.cs</Link>
+    </Compile>
+    <Compile Include="..\core\Exceptions.cs">
+      <Link>Core\Exceptions.cs</Link>
+    </Compile>
+    <Compile Include="..\core\Interfaces.cs">
+      <Link>Core\Interfaces.cs</Link>
+    </Compile>
+    <Compile Include="..\core\Setup.cs">
+      <Link>Core\Setup.cs</Link>
+    </Compile>
+    <Compile Include="..\database\Database.cs">
+      <Link>Databases\Database.cs</Link>
+    </Compile>
+    <Compile Include="..\disks\DiskSpaceMonitor.cs">
+      <Link>Disks\DiskSpaceMonitor.cs</Link>
+    </Compile>
+    <Compile Include="..\files\FileName.cs">
+      <Link>Files\FileName.cs</Link>
+    </Compile>
+    <Compile Include="..\files\FilePath.cs">
+      <Link>Files\FilePath.cs</Link>
+    </Compile>
+    <Compile Include="..\files\FileTools.cs">
+      <Link>Files\FileTools.cs</Link>
+    </Compile>
+    <Compile Include="..\files\griddata\MohidGriddata2D.cs">
+      <Link>Files\Griddata\MohidGriddata2D.cs</Link>
+    </Compile>
+    <Compile Include="..\files\griddata\MohidHorizontalGrid.cs">
+      <Link>Files\Griddata\MohidHorizontalGrid.cs</Link>
+    </Compile>
+    <Compile Include="..\files\TextFile.cs">
+      <Link>Files\TextFile.cs</Link>
+    </Compile>
+    <Compile Include="..\HDF\Tools.cs">
+      <Link>HDF\Tools.cs</Link>
+    </Compile>
+    <Compile Include="..\log\LogEngine.cs">
+      <Link>Log\LogEngine.cs</Link>
+    </Compile>
+    <Compile Include="..\mail\Mail.cs">
+      <Link>Mail\Mail.cs</Link>
+    </Compile>
+    <Compile Include="..\mohidsim\MohidRunEngine.cs">
+      <Link>MohidSim\MohidRunEngine.cs</Link>
+    </Compile>
+    <Compile Include="..\mohidsim\MohidSimulation.cs">
+      <Link>MohidSim\MohidSimulation.cs</Link>
+    </Compile>
+    <Compile Include="..\mohidtimeseries\Conversions.cs">
+      <Link>MohidTimeSeries\Conversions.cs</Link>
+    </Compile>
+    <Compile Include="..\mohidtimeseries\TimeSeries.cs">
+      <Link>MohidTimeSeries\TimeSeries.cs</Link>
+    </Compile>
+    <Compile Include="..\script\Interface.cs">
+      <Link>Script\Interface.cs</Link>
+    </Compile>
+    <Compile Include="..\script\Script.cs">
+      <Link>Script\Script.cs</Link>
+    </Compile>
+    <Compile Include="..\sms\SMS.cs">
+      <Link>SMS\SMS.cs</Link>
+    </Compile>
+    <Compile Include="..\software\ExternalApp.cs">
+      <Link>Software\ExternalApp.cs</Link>
+    </Compile>
+    <Compile Include="..\software\Options.cs">
+      <Link>Software\Options.cs</Link>
+    </Compile>
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup />
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

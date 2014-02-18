@@ -489,7 +489,7 @@ namespace Mohid
 
                ConfigNode root = cfg.Root;
 
-               data.sim.SimDirectory = root["sim.folder", ".\\sim\\"].AsFilePath();
+               data.sim.SimDirectory = root["sim.folder", "sim"].AsFilePath();
                data.logFileName = root["log.file", data.sim.SimDirectory.Path + "sim.log"].AsFileName();
 
                data.RestartFailedRun = root["restart.failed.run", true].AsBool();
@@ -511,11 +511,11 @@ namespace Mohid
                   data.sim.StartTAG = root["sim.start.tag", "<<start>>"].AsString();
                }
 
-               data.sim.DataDirectory = root["data.folder", data.sim.SimDirectory.Path + "data\\"].AsFilePath();
-               data.sim.WorkingDirectory = root["working.folder", data.sim.SimDirectory.Path + "exe\\"].AsFilePath();
-               data.resFolder = root["results.folder", data.sim.SimDirectory.Path + "res\\"].AsFilePath();
-               data.storeFolder = root["store.folder", data.sim.SimDirectory.Path + "store\\"].AsFilePath();
-               data.oldFolder = root["old.folder", data.sim.SimDirectory.Path + "old\\"].AsFilePath();
+               data.sim.DataDirectory = root["data.folder", data.sim.SimDirectory.Path + "data"].AsFilePath();
+               data.sim.WorkingDirectory = root["working.folder", data.sim.SimDirectory.Path + "exe"].AsFilePath();
+               data.resFolder = root["results.folder", data.sim.SimDirectory.Path + "res"].AsFilePath();
+               data.storeFolder = root["store.folder", data.sim.SimDirectory.Path + "store"].AsFilePath();
+               data.oldFolder = root["old.folder", data.sim.SimDirectory.Path + "old"].AsFilePath();
 
                data.sim.SaveOutput = root["save.output", true].AsBool();
                if (data.sim.SaveOutput)

@@ -102,7 +102,7 @@ namespace Mohid
 
          try
          {
-            sim.SimDirectory = root["sim.folder", ".\\sim\\"].AsFilePath();
+            sim.SimDirectory = root["sim.folder", "sim"].AsFilePath();
             if (!log.Load(root["log.file", sim.SimDirectory.Path + "sim.log"].AsFileName()))
                return false;  
 
@@ -135,12 +135,12 @@ namespace Mohid
                simID = 1;
             }
             
-            sim.WorkingDirectory = root["working.folder", ".\\"].AsFilePath();
+            sim.WorkingDirectory = root["working.folder", "."].AsFilePath();
             sim.CheckRun = root["check.run", true].AsBool();
             sim.Verbose = root["verbose", true].AsBool();
             sim.Wait = root["wait", true].AsBool();
             sim.SuccessString = root["check.this", "successfully terminated"].AsString();
-            sim.DataDirectory = root["data.folder", ".\\sim\\data\\"].AsFilePath();
+            sim.DataDirectory = root["data.folder", sim.SimDirectory.Path + "data"].AsFilePath();
             sim.SetupRunPeriod = root["setup.run.period", false].AsBool();
             if (sim.SetupRunPeriod)
             {
@@ -149,13 +149,13 @@ namespace Mohid
             }
             sim.SetupRunPeriod = root["wait", false].AsBool(); 
             sim.SaveOutput = true;
-            sim.OutputFile = new FileName(sim.SimDirectory.Path + "res\\" + root["output.file", "result.txt"].AsString());
-            sim.Executable = new FileName(sim.SimDirectory.Path + "exe\\" + root["mohid.executable", "mohid.exe"].AsString());
+            sim.OutputFile = new FileName(sim.SimDirectory.Path + "res" + System.IO.Path.DirectorySeparatorChar + root["output.file", "result.txt"].AsString());
+            sim.Executable = new FileName(sim.SimDirectory.Path + "exe" + System.IO.Path.DirectorySeparatorChar + root["mohid.executable", "mohid.exe"].AsString());
             sim.CreateInputFiles = root["use.templates", false].AsBool();
             endOfSimulation = root["sim.end"].AsDateTime(dateFormat);
-            resFolder = root["results.folder", sim.SimDirectory.Path + "res\\"].AsFilePath();
-            storeFolder = root["store.folder", sim.SimDirectory.Path + "store\\"].AsFilePath();
-            oldFolder = root["old.folder", sim.SimDirectory.Path + "old\\"].AsFilePath();
+            resFolder = root["results.folder", sim.SimDirectory.Path + "res"].AsFilePath();
+            storeFolder = root["store.folder", sim.SimDirectory.Path + "store"].AsFilePath();
+            oldFolder = root["old.folder", sim.SimDirectory.Path + "old"].AsFilePath();
 
             if (sim.SetupRunPeriod && !sim.CreateInputFiles)
                return false;

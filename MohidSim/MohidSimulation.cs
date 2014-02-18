@@ -238,10 +238,10 @@ namespace Mohid
             EndTAG = "<<end>>";
             CheckRun = true;
             SuccessString = "successfully terminated";
-            SimDirectory = new FilePath(".\\");
-            DataDirectory = new FilePath(".\\data");
+            SimDirectory = new FilePath();
+            DataDirectory = new FilePath("data");
             SaveOutput = true;
-            WorkingDirectory = new FilePath(".\\");
+            WorkingDirectory = new FilePath();
             OutputFile = new FileName("output.txt");
             Executable = new FileName(SimDirectory.Path + "mohid.exe");
             Verbose = false;

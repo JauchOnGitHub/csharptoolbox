@@ -46,8 +46,8 @@ namespace Mohid
             {
                if (string.IsNullOrWhiteSpace(value))
                   path = "";
-               if (!value.EndsWith("\\"))
-                  path = value + "\\";
+               if (!value.EndsWith(System.IO.Path.DirectorySeparatorChar.ToString()))
+                  path = value + System.IO.Path.DirectorySeparatorChar.ToString();
                else
                   path = value;
             }
@@ -107,10 +107,10 @@ namespace Mohid
                   ext = "";
                   return;
                }
-               
-               int pe = value.LastIndexOf('\\');
-               if (pe < 0)                  
-                  path = ".\\";
+
+               int pe = value.LastIndexOf(System.IO.Path.DirectorySeparatorChar);
+               if (pe < 0)
+                  path = "." + System.IO.Path.DirectorySeparatorChar;
                else
                   path = value.Substring(0, pe + 1);
 

@@ -22,7 +22,7 @@ namespace Mohid
 
          protected virtual void Init()
          {
-            File = new FileName(@".\Text.txt");
+            File = new FileName(@"Text.txt");
             fileIsOpenToRead = false;
             fileIsOpenToWrite = false;
             fileStream = null;

@@ -119,8 +119,8 @@ namespace Mohid
          foreach (System.IO.DirectoryInfo g in dir.GetDirectories())
          {
            
-            if (System.IO.File.Exists(g.FullName + "\\basin.refevtp.hdf5"))
-               tool.FilesToGlue.Add(g.FullName + "\\basin.refevtp.hdf5");
+            if (System.IO.File.Exists(g.FullName + System.IO.Path.DirectorySeparatorChar + "basin.refevtp.hdf5"))
+               tool.FilesToGlue.Add(g.FullName + System.IO.Path.DirectorySeparatorChar + "basin.refevtp.hdf5");
          }         
          if (tool.FilesToGlue.Count > 0)
             if (tool.Glue() != 0) res = false;

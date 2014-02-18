@@ -9,7 +9,7 @@ namespace Mohid
 {
    public class Setup
    {
-      public static void StandartSetup()
+      public static void StandardSetup()
       {
          Thread.CurrentThread.CurrentCulture = CultureInfo.InvariantCulture;
       }

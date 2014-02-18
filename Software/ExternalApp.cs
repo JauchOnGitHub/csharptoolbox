@@ -164,7 +164,7 @@ namespace Mohid
 
                ResetOutput();
 
-               Process objProcess = new Process();
+               Process objProcess = new Process();               
 
                if (!opts.wait)
                {
@@ -180,7 +180,7 @@ namespace Mohid
 
                if (string.IsNullOrEmpty(opts.workingDirectory.Path))
                   opts.workingDirectory.Path = opts.exeFile.Path;
-
+               
                objProcess.StartInfo.RedirectStandardOutput = saveDef;
                objProcess.StartInfo.RedirectStandardError = saveErr;
                objProcess.StartInfo.FileName = opts.exeFile.FullPath;
@@ -194,7 +194,7 @@ namespace Mohid
                if (saveErr) 
                   objProcess.ErrorDataReceived += new DataReceivedEventHandler(NewErrorData);
 
-               objProcess.Start();
+               objProcess.Start();               
 
                if (saveDef) objProcess.BeginOutputReadLine();
                if (saveErr) objProcess.BeginErrorReadLine();

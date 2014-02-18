@@ -4,6 +4,8 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Text.RegularExpressions;
+using System.Globalization;
 
 using Mohid;
 using Mohid.Configuration;
@@ -12,8 +14,91 @@ using Mohid.Script;
 using Mohid.Software;
 using Mohid.HDF;
 
-namespace CPTEC2HDF_48h_v1
+namespace CPTEC2HDF_48h_v2
 {
+   public class DatesInterval
+   {
+      private DateTime f_start;
+      private DateTime f_end;
+
+      public DateTime Start
+      {
+         get
+         {
+            return f_start;
+         }
+         set
+         {
+            f_start = value;
+         }
+      }
+      public DateTime End
+      {
+         get
+         {
+            return f_end;
+         }
+         set
+         {
+            f_end = value;
+         }
+      }
+
+      public DatesInterval(DateTime start, DateTime end)
+      {
+         f_start = start;
+         f_end = end;
+      }
+   }
+
+   /// <summary>
+   /// Extracts info from strings (like dates in file/folder names).
+   /// </summary>
+   public class StringExtractor
+   {
+      /// <summary>
+      /// Extract interval dates (start and end) from a string.
+      /// </summary>
+      /// <param name="input">String containing the dates.</param>
+      /// <param name="regex_pattern">Optional regex pattern for search the dates.</param>
+      /// <param name="date_pattern">Date pattern. Used only if regex_pattern is not null, in wich case it is mandatory.</param>
+      /// <returns>DateInterval with the values for the start and end interval dates.</returns>
+      public static DatesInterval ExtractTimeIntervalFromString(string input, string regex_pattern = null, string date_pattern = null)
+      {
+         MatchCollection matches_;
+
+         if (regex_pattern != null)
+         {
+            if (date_pattern == null)
+               throw new Exception("Missing date_pattern argument.");
+
+            matches_ = Regex.Matches(input, regex_pattern);
+            if (matches_.Count == 1) //start and end are in the format yyyy-MM-dd-HH
+            {
+               return new DatesInterval(DateTime.ParseExact(matches_[0].Groups["start"].Value, date_pattern, CultureInfo.InvariantCulture),
+                                        DateTime.ParseExact(matches_[0].Groups["end"].Value, date_pattern, CultureInfo.InvariantCulture));
+            }
+         }
+
+         matches_ = Regex.Matches(input, @"(?<start>\d{4}\D?\d{2}\D?\d{2}\D?\d{2}).(?<end>\d{4}\D?\d{2}\D?\d{2}\D?\d{2})");
+         if (matches_.Count == 1) //start and end are in the format yyyy-MM-dd-HH
+         {
+            return new DatesInterval(DateTime.ParseExact(Regex.Replace(matches_[0].Groups["start"].Value, @"\D", ""), "yyyyMMddHH", CultureInfo.InvariantCulture),
+                                     DateTime.ParseExact(Regex.Replace(matches_[0].Groups["end"].Value, @"\D", ""), "yyyyMMddHH", CultureInfo.InvariantCulture));
+         }
+
+         matches_ = Regex.Matches(input, @"(?<start>\d{4}\D?\d{2}\D?\d{2}).(?<end>\d{4}\D?\d{2}\D?\d{2})");
+         if (matches_.Count == 1) //start and end are in the format yyyy-MM-dd
+         {
+            return new DatesInterval(DateTime.ParseExact(Regex.Replace(matches_[0].Groups["start"].Value, @"\D", ""), "yyyyMMdd", CultureInfo.InvariantCulture),
+                                     DateTime.ParseExact(Regex.Replace(matches_[0].Groups["end"].Value, @"\D", ""), "yyyyMMdd", CultureInfo.InvariantCulture));
+         }
+
+         return null;
+      }
+
+   }
+
    public class FileInfo
    {
       public FileName FileName { get; set; }
@@ -53,7 +138,7 @@ namespace CPTEC2HDF_48h_v1
 
    }
 
-   public class CPTEC2HDFv1 : IMohidTask
+   public class CPTEC2HDFv2 : IMohidTask
    {
       Exception last_exception;
       ConfigNode cfg;
@@ -85,6 +170,7 @@ namespace CPTEC2HDF_48h_v1
       int starting_hour_index;
       int starting_hour;
       int hours_to_glue;
+      int hours_to_glue_by_folder;
       bool glue_all;
       bool replace_glued_files;
       bool first_glue;
@@ -124,7 +210,7 @@ namespace CPTEC2HDF_48h_v1
 
       string hour_format;
 
-      public CPTEC2HDFv1()
+      public CPTEC2HDFv2()
       {
          last_exception = null;
          replace_list = new Dictionary<string, string>();
@@ -247,7 +333,8 @@ namespace CPTEC2HDF_48h_v1
                starting_hour_index = glue_block["starting.hour.index", 1].AsInt();
                //Console.WriteLine("starting.hour.index : {0}", glue_block["starting.hour.index", 1].AsInt());
                //Console.WriteLine("starting_hour_index : {0}", starting_hour_index);
-               hours_to_glue = glue_block["hours.to.glue.by.folder", 12].AsInt();
+               hours_to_glue = glue_block["hours.to.glue", 6].AsInt();
+               hours_to_glue_by_folder = glue_block["hours.to.glue.by.folder", 12].AsInt();
                replace_glued_files = glue_block["replace.files", false].AsBool();
                glue_all = glue_block["glue.all", false].AsBool();
                ignore_errors_on_glue_counting = glue_block["ignore.glue.counting.errors", false].AsBool();
@@ -393,6 +480,7 @@ namespace CPTEC2HDF_48h_v1
       DateTime GetFileStartDateTimeFromName(string filename)
       {
          //Console.WriteLine(filename.Substring(12, 10));
+
          return DateTime.ParseExact(filename.Substring(12, 10), "yyyyMMddHH", null);
       }
 
@@ -413,14 +501,18 @@ namespace CPTEC2HDF_48h_v1
             storing_for_glue = false;
             files_to_glue_count = 0;
             DateTime file_start_date, file_end_date, start_hour_to_check, end_hour_to_check;
+            int hours_lasting = hours_to_glue_by_folder - hours_to_glue;
+            int local_hours_to_glue = hours_to_glue;
             foreach (FileInfo file_info in files_to_process)
             {
-               file_start_date = GetFileStartDateTimeFromName(file_info.FileName.Name);
-               file_end_date = GetFileEndDateTimeFromName(file_info.FileName.Name);
+               DatesInterval di = StringExtractor.ExtractTimeIntervalFromString(file_info.FileName.Name);
+
+               //file_start_date = di.Start; //GetFileStartDateTimeFromName(file_info.FileName.Name);
+               //file_end_date = di.End; //GetFileEndDateTimeFromName(file_info.FileName.Name);
 
                //because I know that the "start" date for CPTEC is 00 or 12 hour, always
-               start_hour_to_check = file_start_date.AddHours(starting_hour_index);
-               end_hour_to_check = start_hour_to_check.AddHours(hours_to_glue);
+               start_hour_to_check = di.Start.AddHours(starting_hour_index);
+               end_hour_to_check = start_hour_to_check.AddHours(local_hours_to_glue - 1);
 
                index++;
                actual_index++;
@@ -446,7 +538,7 @@ namespace CPTEC2HDF_48h_v1
                //}
 
                //if (actual_index >= starting_hour_index && store_files_for_glue)
-               if (file_end_date >= start_hour_to_check && file_end_date < end_hour_to_check)
+               if (di.End >= start_hour_to_check && di.End <= end_hour_to_check)
                {
                   if (!file_info.Processed)
                   {
@@ -485,9 +577,26 @@ namespace CPTEC2HDF_48h_v1
                      }
                   }
                }
-               else if (storing_for_glue)
+
+               if (storing_for_glue && di.End == end_hour_to_check)
                {
                   GlueFilesV2();
+
+                  if (hours_lasting > 0)
+                  {
+                     di.Start.AddHours(hours_to_glue);
+                     hours_lasting -= hours_to_glue;
+                     local_hours_to_glue += hours_to_glue;
+                     if (hours_lasting < 0)
+                     {
+                        local_hours_to_glue += hours_lasting;
+                     }
+                  }
+                  else
+                  {
+                     local_hours_to_glue = hours_to_glue;
+                     hours_lasting = hours_to_glue_by_folder - hours_to_glue;
+                  }
                }
             }
          }

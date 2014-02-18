@@ -60,6 +60,17 @@ namespace Mohid
             return scriptInterface.Run(cmdArgs);
          }         
 
+         public bool Run(FileName task_library, CmdArgs cmdArgs, string task_class)
+         {
+            Assembly compiledAssembly = Assembly.LoadFrom(task_library.FullPath);
+            IMohidScript scriptInterface = (IMohidScript)FindScriptInterface("IMohidScript", compiledAssembly, task_class);
+
+            if (scriptInterface == null)
+               return false;
+
+            return scriptInterface.Run(cmdArgs);
+         }
+
          #endregion ENGINE
 
          #region SCRIPT ASSEMBLAGE
@@ -94,8 +105,26 @@ namespace Mohid
 
          private string LoadCSharpScript(FileName scriptFileName)
          {
-            TextFile scriptFile = new TextFile(scriptFileName);
-            scriptFile.OpenToRead();
+            TextFile scriptFile;
+
+            try
+            {
+               scriptFile = new TextFile(scriptFileName);
+            }
+            catch (Exception ex)
+            {               
+               throw new Exception ("Error when creating script text object. " + ex.Message);
+            }
+
+            try
+            {
+               scriptFile.OpenToRead();
+            }
+            catch (Exception ex)
+            {
+               throw new Exception("Error when opening script file. " + ex.Message);               
+            }
+            
 
             List<string> script = scriptFile.ReadLines();
 
@@ -125,11 +154,14 @@ namespace Mohid
 
             scriptFile.Close();
 
+            Console.WriteLine("Finished reading script file.");
+
             return temp.ToString();
          }
 
          private Assembly CompileCSharpScript(string script)
          {
+            Console.WriteLine("Compiling script...");
             //Declare a compiler
             CodeDomProvider compiler = CodeDomProvider.CreateProvider("CSharp");
 
@@ -174,6 +206,18 @@ namespace Mohid
                if (t.GetInterface(interfaceName, true) != null)
                   return compiledAssembly.CreateInstance(t.FullName);
             }
+
+            return null;
+         }
+
+         public object FindScriptInterface(string interfaceName, Assembly compiledAssembly, string task_class)
+         {
+            if (compiledAssembly == null)
+               return null;
+
+            Type t = compiledAssembly.GetType(task_class);
+            if (t.GetInterface(interfaceName, true) != null)
+               return compiledAssembly.CreateInstance(t.FullName);
 
             return null;
          }

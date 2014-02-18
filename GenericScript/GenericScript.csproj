@@ -71,6 +71,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Script.v10.cs" />
+    <Compile Include="Script.v11.cs" />
     <Compile Include="Script.v4.cs" />
     <Compile Include="Script.v1.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

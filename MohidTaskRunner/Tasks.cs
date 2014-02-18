@@ -90,7 +90,7 @@ namespace Mohid
                   task_i = LoadScript(task_script);
                }
                else
-                  task_i = new CPTEC2HDF_48h_v1.CPTEC2HDFv1();
+                  task_i = new CPTEC2HDF_48h_v2.CPTEC2HDFv2();
 
                if (task_i == null)
                   throw new Exception("Invalid Script");

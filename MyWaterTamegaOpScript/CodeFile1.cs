@@ -171,10 +171,10 @@ namespace Mohid
          System.IO.DirectoryInfo dir = new System.IO.DirectoryInfo(mre.storeFolder.Path);
          foreach (System.IO.DirectoryInfo g in dir.GetDirectories())
          {
-            if (System.IO.File.Exists(g.FullName + "\\" + toGlue.FullName))
+            if (System.IO.File.Exists(g.FullName + System.IO.Path.DirectorySeparatorChar + toGlue.FullName))
             {
                //Console.WriteLine("File '{0}' exists", g.FullName + "\\" + toGlue.FullName);
-               glue.FilesToGlue.Add(g.FullName + "\\" + toGlue.FullName);
+               glue.FilesToGlue.Add(g.FullName + System.IO.Path.DirectorySeparatorChar + toGlue.FullName);
             }
             else
             {
