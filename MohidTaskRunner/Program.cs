@@ -21,7 +21,7 @@ namespace MohidHDF5Processor
 
          try
          {
-            Setup.StandartSetup();
+            Setup.StandardSetup();
             cmdArgs = new CmdArgs(args);
 
             //======================================================================================
