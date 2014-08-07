@@ -19,7 +19,7 @@ namespace GetTSFromHDF
          DateTime start, end;
          FilePath rootResultsPath;
          FileName hdfResultsFile;
-         FilePath timeseriesOutputPath;
+         List<FilePath> timeseriesOutputPath = new List<FilePath>();
          FileName exporterEXE;
          FilePath exporterWorkingPath;
          bool joinTimeseries = false;
@@ -39,6 +39,10 @@ namespace GetTSFromHDF
          errors = new TextFile("errors.log");
          errors.OpenNewToWrite();
          verbose = true;
+         FilePath path;
+         bool dateAndTimeInOutputFolder;
+         string outputFolderFormat = "", outputFolderStartFormat = "", outputFolderEndFormat = "", outputPath, outputPath2;
+         bool useCounter;
 
          try
          {
@@ -75,6 +79,14 @@ namespace GetTSFromHDF
                   Console.WriteLine("{0} 'timeseries.to.extract' block(s) found.", tsList.Count);
                }
 
+               dateAndTimeInOutputFolder = conf.Root["user.def.output.folder", false].AsBool();
+               if (dateAndTimeInOutputFolder)
+               {
+                   outputFolderFormat = conf.Root["user.def.output.folder.format", "start-end"].AsString();
+                   outputFolderStartFormat = conf.Root["user.def.output.start.format", "yyyyMMddHH"].AsString();
+                   outputFolderEndFormat = conf.Root["user.def.output.end.format", "yyyyMMddHH"].AsString();
+               }
+
                int tscCount = 1;
                foreach (ConfigNode tsc in tsList)
                {
@@ -83,19 +95,43 @@ namespace GetTSFromHDF
                   if (verbose)
                      Console.Write("Processing 'timeseries.to.extract' block {0}...", tscCount);
 
-                  start                   = tsc["start.date"].AsDateTime();
-                  end                     = tsc["end.date"].AsDateTime();
+                  start                   = tsc["start"].AsDateTime();
+                  end                     = tsc["end"].AsDateTime();
                   rootResultsPath         = tsc["root.results.path", @".\"].AsFilePath();
                   hdfResultsFile          = tsc["hdf.results.file"].AsFileName();
-                  timeseriesOutputPath    = tsc["timeseries.output.path", @".\"].AsFilePath();
+                  if (tsc.Contains("backup_path"))
+                  {
+                      path = tsc["backup_path"].AsFilePath();
+                      timeseriesOutputPath.Add(path);
+                  }
+                  if (tsc.Contains("storage_path"))
+                  {
+                      path = tsc["storage_path"].AsFilePath();
+                      timeseriesOutputPath.Add(path);
+                  }
+                  if (tsc.Contains("publish_path"))
+                  {
+                      path = tsc["publish_path"].AsFilePath();
+                      timeseriesOutputPath.Add(path);
+                  }
+
+                  if (timeseriesOutputPath.Count <= 0)
+                  {
+                      throw new Exception("An error was found in the configuration file. Missing keyword." + "At least ONE of the following keywords must be provided:" +
+                                          "BACKUP_PATH, STORAGE_PATH, PUBLISH_PATH");                      
+                  }
                   exporterEXE             = tsc["exporter.exe"].AsFileName();
                   exporterWorkingPath     = tsc["exporter.working.path"].AsFilePath();
                   joinTimeseries          = tsc["join.timeseries", true].AsBool();
-                  folderFormat            = tsc["folder.format", "start_end"].AsString();
+                  if (joinTimeseries && dateAndTimeInOutputFolder)
+                  {
+                      throw new Exception("join.timeseries can't be used with user.def.output.folder");
+                  }
+                  folderFormat            = tsc["folder.format", "start-end"].AsString();
                   startFormat             = tsc["start.format", "yyyyMMddHH"].AsString();
                   endFormat               = tsc["end.format", "yyyyMMddHH"].AsString();
                   runLenght               = tsc["run.lenght"].AsDouble();
-                  
+                  useCounter              = tsc["use.counter.on.names", false].AsBool();
 
                   if (joinTimeseries)
                   {
@@ -206,7 +242,7 @@ namespace GetTSFromHDF
                   DateTime actual = start;
                   FilePath hdfResultsPath = new FilePath();
                   saveCounter = 1;
-                  while (actual <= end)
+                  while (actual.AddDays(runLenght) <= end)
                   {
                      fail = false;
 
@@ -273,8 +309,33 @@ namespace GetTSFromHDF
                                     {
                                        try
                                        {
-                                          outTS[file.FileName.Name].Save(new FileName(timeseriesOutputPath.Path + file.FileName.FullName));
+                                           if (dateAndTimeInOutputFolder)
+                                           {
+                                               outputPath = timeseriesOutputPath[0].Path +
+                                                   (outputFolderFormat.Replace("start", actual.ToString(outputFolderStartFormat)).Replace("end", actual.AddDays(runLenght).ToString(outputFolderEndFormat))) + System.IO.Path.DirectorySeparatorChar;
+                                           }
+                                           else
+                                           {
+                                               outputPath = timeseriesOutputPath[0].Path;
+                                           }
+                                           if (!System.IO.Directory.Exists(outputPath))
+                                               System.IO.Directory.CreateDirectory(outputPath);
+
+                                          outTS[file.FileName.Name].Save(new FileName(outputPath + file.FileName.FullName));
                                           saveCounter = 1;
+                                          if (timeseriesOutputPath.Count > 1)
+                                          {
+                                              for (int i = 1; i < timeseriesOutputPath.Count; i++)
+                                              {
+                                                  outputPath2 = timeseriesOutputPath[i].Path +
+                                                   (outputFolderFormat.Replace("start", actual.ToString(outputFolderStartFormat)).Replace("end", actual.AddDays(runLenght).ToString(outputFolderEndFormat))) + System.IO.Path.DirectorySeparatorChar;
+                                                  if (!System.IO.Directory.Exists(outputPath2))
+                                                      System.IO.Directory.CreateDirectory(outputPath2);
+                                                  FileTools.CopyFile(new FileName(outputPath + file.FileName.FullName),
+                                                                     new FileName(outputPath2 + file.FileName.FullName), CopyOptions.OVERWRIGHT);
+                                              }
+                                          }
+
                                        }
                                        catch (Exception ex)
                                        {
@@ -296,17 +357,45 @@ namespace GetTSFromHDF
 
                               foreach (FileInfo file in tsFileInfoList)
                               {
-                                 if (useDateOnTimeseriesName)
+                                  if (dateAndTimeInOutputFolder)
+                                  {
+                                      outputPath = timeseriesOutputPath[0].Path +
+                                          (outputFolderFormat.Replace("start", actual.ToString(outputFolderStartFormat)).Replace("end", actual.AddDays(runLenght).ToString(outputFolderEndFormat))) + System.IO.Path.DirectorySeparatorChar;
+                                  }
+                                  else
+                                  {
+                                      outputPath = timeseriesOutputPath[0].Path;
+                                  }
+                                  timeseriesTarget.Path = outputPath;
+                                  if (!System.IO.Directory.Exists(outputPath))
+                                      System.IO.Directory.CreateDirectory(outputPath);
+                                  if (useDateOnTimeseriesName)
                                  {
-                                    timeseriesTarget.Path = timeseriesOutputPath.Path;
+                                     
                                     timeseriesTarget.FullName = file.FileName.FullName.Insert(file.FileName.FullName.LastIndexOf('.'), actual.ToString(startFormat) + "_" + actual.AddDays(runLenght).ToString(endFormat));
                                  }
-                                 else
-                                 {
-                                    timeseriesTarget.FullPath = timeseriesOutputPath.Path + file.FileName.FullName.Insert(file.FileName.FullName.LastIndexOf('.'), timeseriesNameCounter.ToString());
-                                    timeseriesNameCounter++;
-                                 }
+                                  else if (useCounter)
+                                  {
+                                      timeseriesTarget.FullName = file.FileName.FullName.Insert(file.FileName.FullName.LastIndexOf('.'), timeseriesNameCounter.ToString());
+                                      timeseriesNameCounter++;
+                                  }
+                                  else
+                                  {
+                                      timeseriesTarget.FullName = file.FileName.FullName;
+                                  }
                                  FileTools.CopyFile(file.FileName, timeseriesTarget, CopyOptions.OVERWRIGHT);
+                                 if (timeseriesOutputPath.Count > 1)
+                                 {
+                                     for (int i = 1; i < timeseriesOutputPath.Count; i++)
+                                     {
+                                         outputPath2 = timeseriesOutputPath[i].Path +
+                                          (outputFolderFormat.Replace("start", actual.ToString(outputFolderStartFormat)).Replace("end", actual.AddDays(runLenght).ToString(outputFolderEndFormat))) + System.IO.Path.DirectorySeparatorChar;
+                                         if (!System.IO.Directory.Exists(outputPath2))
+                                             System.IO.Directory.CreateDirectory(outputPath2);
+                                         FileTools.CopyFile(new FileName(outputPath + file.FileName.FullName),
+                                                            new FileName(outputPath2 + file.FileName.FullName), CopyOptions.OVERWRIGHT);
+                                     }
+                                 }
                               }
                            }
                         }
@@ -321,7 +410,27 @@ namespace GetTSFromHDF
                   {
                      foreach (KeyValuePair<string, TimeSeries> pair in outTS)
                      {
-                        pair.Value.Save(new FileName(timeseriesOutputPath.Path + pair.Key + ".ets"));
+                         if (dateAndTimeInOutputFolder)
+                         {
+                             outputPath = timeseriesOutputPath[0].Path +
+                                 (outputFolderFormat.Replace("start", actual.ToString(outputFolderStartFormat)).Replace("end", actual.AddDays(runLenght).ToString(outputFolderEndFormat))) + System.IO.Path.DirectorySeparatorChar;
+                         }
+                         else
+                         {
+                             outputPath = timeseriesOutputPath[0].Path;
+                         }
+                         if (!System.IO.Directory.Exists(outputPath))
+                             System.IO.Directory.CreateDirectory(outputPath);
+                         pair.Value.Save(new FileName(outputPath + pair.Key + ".ets"));
+                         for (int i = 1; i < timeseriesOutputPath.Count; i++)
+                         {
+                             outputPath2 = timeseriesOutputPath[i].Path +
+                              (outputFolderFormat.Replace("start", actual.ToString(outputFolderStartFormat)).Replace("end", actual.AddDays(runLenght).ToString(outputFolderEndFormat))) + System.IO.Path.DirectorySeparatorChar;
+                             if (!System.IO.Directory.Exists(outputPath2))
+                                 System.IO.Directory.CreateDirectory(outputPath2);
+                             FileTools.CopyFile(new FileName(outputPath + pair.Key + ".ets"),
+                                                new FileName(outputPath2 + pair.Key + ".ets"), CopyOptions.OVERWRIGHT);
+                         }
                      }
                   }  
 
