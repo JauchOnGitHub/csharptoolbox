@@ -217,7 +217,7 @@ namespace SMSSender
 
                   if (r != Mohid.Core.Result.OK)
                   {
-                     errors.AppendLine(DateTime.Now + ": SMS LOG on database was not possible.");
+                     errors.AppendLine(DateTime.Now + ": SMS sending failed.");
                      errors.AppendLine("Mobile Phone: " + toSend["MobilePhone"].ToString());
                      errors.AppendLine("SMS Day     : " + toSend["SMS_Day"].ToString());
                      errors.AppendLine("SMS Hour    : " + toSend["SMS_Hour"].ToString());
@@ -227,7 +227,7 @@ namespace SMSSender
                   else
                   {
                      if (!LogMessageOnDatabase(toSend))
-                        throw new Exception("Was not possible to LOG the message sent on database");
+                        throw new Exception("Was not possible to LOG the message in the database");
                   }
                }
             }
@@ -277,8 +277,7 @@ namespace SMSSender
                            "ON FarmerGroups.ID = SMS.ID_Group " +
                            "WHERE Farmer.Ativo = 1 AND FarmerSMSInfo.SMS_Day = " + ((int)(date_time_to_send.DayOfWeek) + 1) + " AND " +
                            "SMS.SMS_Day = FarmerSMSInfo.SMS_Day AND " +
-                           "FarmerSMSInfo.SMS_Hour >= #" + date_time_to_send.Hour + ":00:00# AND " +
-                           "FarmerSMSInfo.SMS_Hour <= #" + date_time_to_send.Hour + ":59:59#";
+                           "FarmerSMSInfo.SMS_Hour <= #" + date_time_to_send.Hour + ":" + date_time_to_send.Minute + ":" + date_time_to_send.Second + "#";
 
             OdbcDataReader reader = database.ExecuteQuery(query);
             return reader;
