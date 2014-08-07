@@ -246,7 +246,7 @@ namespace Mohid
             if ((r = SendCommand("at+cpin?", CmdSettings.TimeToWait, CmdSettings.IncludeLineTerminator, true, results)) != Result.OK) return r;                    
         
             foreach (string res in results)
-               if (res == ("+CPIN: SIM PIN")) return Result.FALSE;
+               if (res.Contains("+CPIN: SIM PIN")) return Result.FALSE;
 
             return Result.TRUE;
          }
